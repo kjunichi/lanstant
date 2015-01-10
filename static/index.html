@@ -1,0 +1,50 @@
+<html>
+<body>
+  <a href="alpha/index.html">start</a>
+  <script>
+    // ~/.lanstant/update.logの確認
+    var fs = require('fs');
+    var execsyncs = require('execsyncs');
+
+    var prefFolderPath = process.env.HOME + "/.lanstant";
+    var prefFilePath = prefFolderPath + "/update.log";
+    var updateInfo;
+
+    try {
+      updateInfo = fs.readFileSync(prefFilePath,{encoding:'utf-8'});
+    } catch (err) {
+      console.log(err);
+      if(err.code === "ENOENT") {
+        // 初期設定ファイルが存在しない場合、DLする。
+
+        // ~/.lanstantディレクトリの作成をする
+        try {
+          fs.mkdirSync(prefFolderPath);
+        } catch(err) {
+          // 既にディレクトリが存在していても無視する。
+          if(err.code != "EEXIST") {
+            console.log(err);
+          }
+        }
+        // リソースの取得シェルを実行する
+        var buildShellPath = __dirname+"/bin/build.sh";
+        var result = "" + execsyncs(buildShellPath);
+        console.log(result);
+        // ~/.lanstant/update.logを作成する
+        try {
+          fs.writeFileSync(prefFilePath,new Date(),{encoding:'utf-8'});
+        } catch(err) {
+          console.log(err);
+        }
+      }
+    }
+
+    //fs.mkdirSync(prefFolderPath);
+
+    // 現在時刻をupdate.logファイルに書き込む
+    // リロードする
+
+
+  </script>
+</body>
+</html>
