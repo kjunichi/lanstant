@@ -1,50 +1,40 @@
 <html>
+<head>
+  <style>
+  .progress {
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    font-size:400px;
+  }
+  </style>
+</head>
 <body>
-  <a href="alpha/index.html">start</a>
+  <!-- <a href="alpha/index.html">start</a>-->
+  <div id="progress" class="progress"></div>
   <script>
-    // ~/.lanstant/update.logの確認
-    var fs = require('fs');
-    var execsyncs = require('execsyncs');
+    var ipc = require('ipc');
 
-    var prefFolderPath = process.env.HOME + "/.lanstant";
-    var prefFilePath = prefFolderPath + "/update.log";
-    var updateInfo;
-
-    try {
-      updateInfo = fs.readFileSync(prefFilePath,{encoding:'utf-8'});
-    } catch (err) {
-      console.log(err);
-      if(err.code === "ENOENT") {
-        // 初期設定ファイルが存在しない場合、DLする。
-
-        // ~/.lanstantディレクトリの作成をする
-        try {
-          fs.mkdirSync(prefFolderPath);
-        } catch(err) {
-          // 既にディレクトリが存在していても無視する。
-          if(err.code != "EEXIST") {
-            console.log(err);
-          }
-        }
-        // リソースの取得シェルを実行する
-        var buildShellPath = __dirname+"/bin/build.sh";
-        var result = "" + execsyncs(buildShellPath);
-        console.log(result);
-        // ~/.lanstant/update.logを作成する
-        try {
-          fs.writeFileSync(prefFilePath,new Date(),{encoding:'utf-8'});
-        } catch(err) {
-          console.log(err);
-        }
-      }
+    var progressChars =['-','\\','|','/'];
+    var i=0;
+    function updatingAnime(dom) {
+      dom.innerHTML = progressChars[(i++)%4];
     }
+    
 
-    //fs.mkdirSync(prefFolderPath);
+    // Runstantの更新処理を実行する。
+    //document.getElementById("progress").style.fontSize="350px";
+    var timerId = setInterval(function() {
+      return updatingAnime(document.getElementById("progress"));
+    },300);
+    ipc.send('updateRunstant', 'new');
 
-    // 現在時刻をupdate.logファイルに書き込む
-    // リロードする
-
-
+    ipc.on('doneUpdateRunstant', function(arg) {
+      // Runstantの更新処理完了の通知を受けた際の処理。
+      clearInterval(timerId);
+      // Runstantへ遷移する。
+      location.href="alpha/index.html";
+    });
   </script>
 </body>
 </html>
