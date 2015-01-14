@@ -17,7 +17,6 @@
       "url": "http://github.com/kjunichi/lanstant/raw/master/LICENSE.md"
     }
   ],
-  "atomShellVersion": "0.20.5",
   "dependencies": {
     "async": "0.2.6",
     "coffee-script": "1.7.0",
