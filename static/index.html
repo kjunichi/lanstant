@@ -1,40 +1,62 @@
 <html>
+
 <head>
+  <link rel="stylesheet" href="lanstant.css">
   <style>
-  .progress {
-    text-align:center;
-    margin-left:auto;
-    margin-right:auto;
-    font-size:400px;
-  }
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
   </style>
 </head>
+
 <body>
   <!-- <a href="alpha/index.html">start</a>-->
-  <div id="progress" class="progress"></div>
+  <div id="loading" class="spin"></div>
   <script>
     var ipc = require('ipc');
 
-    var progressChars =['-','\\','|','/'];
-    var i=0;
-    function updatingAnime(dom) {
-      dom.innerHTML = progressChars[(i++)%4];
-    }
-    
+    function showRunstant() {
+        //location.href="alpha/index.html";
 
-    // Runstantの更新処理を実行する。
-    //document.getElementById("progress").style.fontSize="350px";
-    var timerId = setInterval(function() {
-      return updatingAnime(document.getElementById("progress"));
-    },300);
+        var elm = document.getElementById("loading");
+        elm.parentElement.removeChild(elm);
+
+        var hashbar = document.createElement("input");
+        hashbar.type = "text";
+        hashbar.style.width=innerWidth;
+        document.body.appendChild(hashbar);
+
+        elm = document.createElement("iframe");
+        elm.src = "alpha/index.html"
+        elm.width = innerWidth;
+        elm.height = innerHeight - 80;
+        document.body.appendChild(elm);
+        var savedHash;
+        setInterval(function() {
+          if (savedHash != frames[0].location.hash) {
+            savedHash = frames[0].location.hash
+            hashbar.value = savedHash;
+          }
+
+        }, 600);
+
+        // elm = document.createElement("webview");
+        // elm.src="alpha/index.html"
+        // document.body.appendChild(elm);
+      }
+      // Runstantの更新処理を実行する。
+      //document.getElementById("progress").style.fontSize="350px";
+
     ipc.send('updateRunstant', 'new');
 
     ipc.on('doneUpdateRunstant', function(arg) {
       // Runstantの更新処理完了の通知を受けた際の処理。
-      clearInterval(timerId);
       // Runstantへ遷移する。
-      location.href="alpha/index.html";
+      showRunstant();
+
     });
   </script>
 </body>
+
 </html>

@@ -61,7 +61,7 @@ app.on('ready', function() {
     }
   }
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 1024, height: 900});
 
   // and load the index.html of the app.
   var targetPath = path.resolve(__dirname, '..', '..', 'static', 'index.html');
