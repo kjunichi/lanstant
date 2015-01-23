@@ -15,10 +15,12 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-bower-task')
   grunt.loadNpmTasks('grunt-coffeelint')
   grunt.loadNpmTasks('grunt-lesslint')
+  grunt.loadNpmTasks('grunt-scss-lint')
   grunt.loadNpmTasks('grunt-cson')
   grunt.loadNpmTasks('grunt-contrib-csslint')
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-less')
+  grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-shell')
   grunt.loadNpmTasks('grunt-build-atom-shell')
   grunt.loadNpmTasks('grunt-atom-shell-installer')
@@ -92,6 +94,19 @@ module.exports = (grunt) ->
       dest: appDir
       ext: '.css'
 
+  sassConfig = 
+    options:
+      style: [
+        'expanded'
+      ]
+    glob_to_multiple:
+      expand: true
+      src: [
+        'static/**/*.scss'
+      ]
+      dest: appDir
+      ext: '.css'
+
   csonConfig =
     options:
       rootObject: true
@@ -115,6 +130,8 @@ module.exports = (grunt) ->
     coffee: coffeeConfig
 
     less: lessConfig
+ 
+    sass: sassConfig
 
     cson: csonConfig
 
@@ -162,6 +179,11 @@ module.exports = (grunt) ->
         'static/**/*.less'
       ]
 
+    scsslint:
+      src: [
+        'static/**/*.scss'
+      ]
+
     'build-atom-shell':
       tag: "v0.20.6"
       remoteUrl: "https://github.com/atom/atom-shell"
@@ -193,8 +215,8 @@ module.exports = (grunt) ->
 
   grunt.initConfig(opts)
 
-  grunt.registerTask('compile', ['coffee', 'cson'])
-  grunt.registerTask('lint', ['coffeelint', 'csslint', 'lesslint'])
+  grunt.registerTask('compile', ['coffee', 'cson', 'sass'])
+  grunt.registerTask('lint', ['coffeelint', 'csslint', 'lesslint', 'scsslint'])
   grunt.registerTask('test', ['shell:kill-app', 'run-specs'])
 
   ciTasks = ['output-disk-space', 'build-atom-shell', 'bower:install', 'build']
