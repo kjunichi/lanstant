@@ -1,0 +1,61 @@
+@mixin transform($transform-str) {
+  -webkit-transform: $transform-str;
+  -moz-transform: $transform-str;
+  -ms-transform: $transform-str;
+  -o-transform: $transform-str;
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@mixin animation($animation-name) {
+  -webkit-animation: $animation-name;
+  -moz-animation: $animation-name;
+  animation: $animation-name;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@include keyframes(spin) {
+  0% {
+    @include transform(rotate(0deg) scale(0.6));
+    background: #bf4040;
+  }
+  25% {
+    @include transform(rotate(90deg) scale(0.7));
+    background: #80bf40;
+  }
+  50% {
+    @include transform(rotate(180deg) scale(1));
+    background: #40bfbf;
+  }
+  75% {
+    @include transform(rotate(270deg) scale(0.7));
+    background: #7f40bf;
+  }
+  100% {
+    @include transform(rotate(360deg) scale(0.6));
+    background: #bf4040;
+  }
+}
+
+.spin {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  text-align: center;
+  background: #11aaaa;
+  font-size: 30px;
+  -webkit-animation: spin 1.7s linear infinite;
+  animation: spin 1.7s linear infinite;
+}
