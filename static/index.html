@@ -7,27 +7,18 @@
       padding: 0px;
       margin: 0px;
     }
-    #toolbar {
-      width: 100%;
-      height: 50px;
-    }
-    #icon {
-      float: left;
-      width: 50px;
-      height: 50px;
-      background-color:#f0f;
-    }
-    #hashbar {
-      float: left;
-      width: 950px
-    }
+
   </style>
 </head>
 
 <body>
   <!-- <a href="alpha/index.html">start</a>-->
   <div id="loading" class="spin"></div>
-  <div id="toolbar"><div id="icon"></div><div id="hashbar"></div></div>
+  <div id="toolbar">
+    <div id="hashbar"><div id="hashbox"><input id="hashboxtext" type="text" value=""></div></div>
+    <div id="icon">
+    </div>
+  </div>
   <script>
     function showIcon() {
       var elm=frames[0].document.head;
@@ -40,7 +31,7 @@
       img.src=elms[0].href;
       img.style.width="50px";
       img.style.height="50px";
-      
+
       document.getElementById("icon").appendChild(img);
 
     }
@@ -52,11 +43,8 @@
         var elm = document.getElementById("loading");
         elm.parentElement.removeChild(elm);
 
-        var hashbar = document.createElement("input");
-        hashbar.type = "text";
-        hashbar.style.width="100%";
-        document.getElementById("hashbar").appendChild(hashbar);
-
+        var hashbar = document.getElementById("hashboxtext");
+        
         elm = document.createElement("iframe");
         elm.onload=showIcon;
         elm.width = innerWidth;
